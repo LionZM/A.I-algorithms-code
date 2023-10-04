@@ -1,1 +1,64 @@
+tree = {
+    "S": [["A", 3], ["B", 2], ["C", 5]],
+    "A": [["G", 2], ["C", 3]],
+    "G": [["E", 5], ["D", 4]],
+    "D": [["E", 2], ["F", 3]],
+    "B": [["A", 4], ["D", 6]],
+    "C": [["B", 4], ["H", 3]],
+    "H": [["A", 4], ["D", 4]],
+    "E": [["F", 5]],
+    "F": []
+}
 
+heuristic_values = {"S": 10, "B": 9, "A": 8, "C": 7, "H": 6, "D": 4, "G": 6, "E": 3, "F": 0}
+
+
+def astar_search_algo(tree, start, goal, heuristic_values):
+    def neighbors(node):
+        return [neighbor for neighbor, cost in tree[node]]
+
+    def path(came_from, current):
+        path = [current]
+        while current in came_from:
+            current = came_from[current]
+            path.append(current)
+        path.reverse()
+        return path
+
+    open_set = {(0, start)}
+    came_from = {}
+    cost_to_node = {node: float('inf') for node in tree}
+    cost_to_node[start] = 0
+
+    def get_heuristic_value(item):
+        return item[0]
+
+    while open_set:
+
+        cost, current_node = min(open_set, key=get_heuristic_value)
+        open_set.remove((cost, current_node))
+
+        if current_node == goal:
+            return path(came_from, current_node)
+
+        for neighbor, cost in tree[current_node]:
+            new_cost_to_neighbor = cost_to_node[current_node] + cost
+
+            if new_cost_to_neighbor < cost_to_node[neighbor]:
+                came_from[neighbor] = current_node
+                cost_to_node[neighbor] = new_cost_to_neighbor
+                cost = new_cost_to_neighbor + heuristic_values[neighbor]
+
+                if (cost, neighbor) not in open_set:
+                    open_set.add((cost, neighbor))
+
+
+start_node = "S"
+goal_node = "F"
+
+path = astar_search_algo(tree, start_node, goal_node, heuristic_values)
+
+if path:
+    print("Goal path achieved:", " --> ".join(path))
+else:
+    print("...")
