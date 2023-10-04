@@ -25,7 +25,7 @@ def astar_search_algo(tree, start, goal, heuristic_values):
         path.reverse()
         return path
 
-    open_set = {(0, start)}
+    open_list = {(0, start)}
     came_from = {}
     cost_to_node = {node: float('inf') for node in tree}
     cost_to_node[start] = 0
@@ -33,10 +33,10 @@ def astar_search_algo(tree, start, goal, heuristic_values):
     def get_heuristic_value(item):
         return item[0]
 
-    while open_set:
+    while open_list:
 
-        cost, current_node = min(open_set, key=get_heuristic_value)
-        open_set.remove((cost, current_node))
+        cost, current_node = min(open_list, key=get_heuristic_value)
+        open_list.remove((cost, current_node))
 
         if current_node == goal:
             return path(came_from, current_node)
@@ -49,8 +49,8 @@ def astar_search_algo(tree, start, goal, heuristic_values):
                 cost_to_node[neighbor] = new_cost_to_neighbor
                 cost = new_cost_to_neighbor + heuristic_values[neighbor]
 
-                if (cost, neighbor) not in open_set:
-                    open_set.add((cost, neighbor))
+                if (cost, neighbor) not in open_list:
+                    open_list.add((cost, neighbor))
 
 
 start_node = "S"
