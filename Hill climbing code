@@ -1,0 +1,52 @@
+heuristic_values = {
+    'A': 7,
+    'B': 5,
+    'C': 3,
+    'U': 4,
+    'E': 2,
+    'G': 3,
+    'I': 6,
+    'J': 4,
+    'K': 1,
+    'Y': 2,
+    'M': 0
+}
+
+graph = {
+    'A': [('C', 3), ('B', 5), ('U', 4)],
+    'B': [('E', 2), ('G', 3)],
+    'C': [('I', 6), ('J', 4), ('G', 3)],
+    'U': [('K', 1), ('Y', 2)],
+    'E': [('M', 0), ('G', 3)],
+    'G': [('M', 0)],
+    'I': [('M', 0)],
+    'J': [('K', 1)],
+    'K': [('J', 4)],
+    'Y': [('M', 0)],
+    'M': []
+}
+
+start_state = 'A'
+goal_state = 'M'
+
+def get_neighbors(state, graph):
+    neighbors = []
+    for neighbor, _ in graph[state]:
+        neighbors.append(neighbor)
+    return neighbors
+
+
+def hill_climbing(heuristic_values, start_state):
+    current_state = start_state
+    path = [current_state]
+    while current_state != goal_state:
+        neighbors = get_neighbors(current_state, graph)
+        best_neighbor = min(neighbors, key=lambda state: heuristic_values[state])
+        if heuristic_values[best_neighbor] >= heuristic_values[current_state]:
+            return path
+        current_state = best_neighbor
+        path.append(current_state)
+    return path
+
+
+print(' ', ' -- '.join(hill_climbing(heuristic_values, start_state)))
