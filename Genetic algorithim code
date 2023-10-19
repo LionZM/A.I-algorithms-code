@@ -61,14 +61,10 @@ def main():
         population = new_generation
         best_individual = population[0]
         print("Generation: {} String: {} Fitness: {}".
-              format(generation,
-                     "".join(best_individual),
-                     fitness(best_individual, TARGET)))
+              format(generation,"".join(best_individual), fitness(best_individual, TARGET)))
         generation += 1
     print("Generation: {} String: {} Fitness: {}".
-          format(generation,
-                 "".join(population[0]),
-                 fitness(population[0], TARGET)))
+          format(generation, "".join(population[0]), fitness(population[0], TARGET)))
 
 
 if __name__ == '__main__':
