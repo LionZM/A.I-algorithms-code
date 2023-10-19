@@ -1,0 +1,75 @@
+import random
+
+
+POPULATION_SIZE = 100
+
+
+GENES = '''abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOP 
+QRSTUVWXYZ 1234567890, .-;:_!"#%&/()=?@${[]}'''
+
+# Target string to be generated
+TARGET = "Molloy University"
+
+
+def mutated_genes():
+    return random.choice(GENES)
+
+
+def create_gnome(target_gene_length):
+    return [mutated_genes() for _ in range(target_gene_length)]
+
+
+def mate(par1, par2):
+    child_chromosome = []
+    for gene_pool1, gene_pool2 in zip(par1, par2):
+        prob = random.random()
+        if prob < 0.45:
+            child_chromosome.append(gene_pool1)
+        elif prob < 0.90:
+            child_chromosome.append(gene_pool2)
+        else:
+            child_chromosome.append(mutated_genes())
+    return child_chromosome
+
+
+def fitness(chromosome, target):
+    fitness = sum(1 for Chromosone_G, gene_target in zip(chromosome, target) if Chromosone_G != gene_target)
+    return fitness
+
+
+def main():
+    generation = 1
+    found = False
+    population = []
+    target_gene_length = len(TARGET)
+    for _ in range(POPULATION_SIZE):
+        gnome = create_gnome(target_gene_length)
+        population.append(gnome)
+    while not found:
+        population = sorted(population, key=lambda x: fitness(x, TARGET))
+        if fitness(population[0], TARGET) <= 0:
+            break
+        new_generation = []
+        s = int((10 * POPULATION_SIZE) / 100)
+        new_generation.extend(population[:s])
+        s = int((90 * POPULATION_SIZE) / 100)
+        for _ in range(s):
+            parent1 = random.choice(population[:50])
+            parent2 = random.choice(population[:50])
+            child = mate(parent1, parent2)
+            new_generation.append(child)
+        population = new_generation
+        best_individual = population[0]
+        print("Generation: {} String: {} Fitness: {}".
+              format(generation,
+                     "".join(best_individual),
+                     fitness(best_individual, TARGET)))
+        generation += 1
+    print("Generation: {} String: {} Fitness: {}".
+          format(generation,
+                 "".join(population[0]),
+                 fitness(population[0], TARGET)))
+
+
+if __name__ == '__main__':
+    main()
