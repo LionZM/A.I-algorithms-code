@@ -1,0 +1,24 @@
+import math
+
+def minimax(current_depth, nodeIndex, maxTurn, values, targetDepth):
+    if current_depth == targetDepth:
+        return values[nodeIndex]
+    if maxTurn:
+        return max(
+            minimax(current_depth + 1, nodeIndex * 2, False, values, targetDepth),
+            minimax(current_depth + 1, nodeIndex * 2 + 1, False, values, targetDepth)
+        )
+    else:
+        return min(
+            minimax(current_depth + 1, nodeIndex * 2, True, values, targetDepth),
+            minimax(current_depth + 1, nodeIndex * 2 + 1, True, values, targetDepth)
+        )
+
+# Driver code
+def main():
+    values = [3, 5, 17, 8, -2, 5, -1, 7]
+    treeDepth = int(math.log(len(values), 2))
+    optimal_value = minimax(0, 0, True, values, treeDepth)
+    print("The optimal value is:", optimal_value)
+
+main()
