@@ -1,0 +1,41 @@
+import math
+
+
+
+
+def alpha_beta(current_depth, nodeIndex, alpha, beta, maxTurn, values, targetDepth):
+   if current_depth == targetDepth:
+       return values[nodeIndex]
+   if maxTurn:
+       bestValue = float('-inf')
+       for i in range(2):
+           childValue = alpha_beta(current_depth + 1, nodeIndex * 2 + i, alpha, beta, False, values, targetDepth)
+           bestValue = max(bestValue, childValue)
+           alpha = max(alpha, bestValue)
+           if beta <= alpha:
+               break
+       return bestValue
+   else:
+       bestValue = float('inf')
+       for i in range(2):
+           childValue = alpha_beta(current_depth + 1, nodeIndex * 2 + i, alpha, beta, True, values, targetDepth)
+           bestValue = min(bestValue, childValue)
+           beta = min(beta, bestValue)
+           if beta <= alpha:
+               break
+       return bestValue
+
+
+
+
+# Driver code
+def main():
+   values = [3, 5, 17, 8, -2, 5, -1, 7]
+   treeDepth = int(math.log(len(values), 2))
+   optimal_value = alpha_beta(0, 0, float('-inf'), float('inf'), True, values, treeDepth)
+   print("The optimal value is:", optimal_value)
+
+
+
+
+main()
