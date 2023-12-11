@@ -1,0 +1,31 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+
+data = pd.read_csv("/Users/Rasputin/Documents/CSC/Presentation work/College Data.csv")
+pd.set_option('display.float', '{:.2f}'.format)
+
+
+
+sns.set_style('whitegrid')
+plt.figure(figsize=(10, 8))
+sns.scatterplot(x='room_board', y='grad_rate', data=data, hue='private')
+
+sns.set_style('whitegrid')
+plt.figure(figsize=(10, 8))
+sns.scatterplot(x='enroll', y='accept', data=data, hue='private')
+plt.show()
+
+kmeans = KMeans(2)
+kmeans.fit(data.drop('private', axis=1))
+
+
+scalar = StandardScaler()
+X = data.drop('private', axis=1)
+y = data.private
+X = scalar.fit_transform(X)
+kmeans = KMeans(2)
+kmeans.fit(X)
